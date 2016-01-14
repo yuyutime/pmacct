@@ -20,7 +20,7 @@ DOCUMENTATION
 #BUILDING#
 
 - Build GitHub code:
-  * git clone https://github.com/pmacct/pmacct.git
+  * git clone -b 1.5.3 https://github.com/pmacct/pmacct.git
   * cd pmacct
   * bin/fix_autotools_timestamps.sh
   * ./configure *[check-out available configure knobs via ./configure --help]* 
