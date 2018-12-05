@@ -73,6 +73,7 @@ struct custom_primitives_ptrs {
 };
 
 struct configuration {
+  char *config_file; /* [PATH_MAX];	 expanded realpath of config file */
   pm_cfgreg_t what_to_count;	/* first registry */
   pm_cfgreg_t what_to_count_2;	/* second registry */
   pm_cfgreg_t nfprobe_what_to_count;

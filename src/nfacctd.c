@@ -45,9 +45,14 @@
 #if defined (WITH_NDPI)
 #include "ndpi/ndpi.h"
 #endif
+#if defined (WITH_WEB)
+#include "web/web.h"
+#endif
 
 /* variables to be exported away */
 struct channels_list_entry channels_list[MAX_N_PLUGINS]; /* communication channels: core <-> plugins */
+
+unsigned char *netflow_packet_mirror; /* serve as an exported mirrored copy of netflow_packet pointer in main() - for use in web callbacks, etc */
 
 /* Functions */
 void usage_daemon(char *prog_name)
@@ -177,6 +182,8 @@ int main(int argc,char **argv, char **envp)
   find_id_func = NF_find_id;
   plugins_list = NULL;
   netflow_packet = malloc(NETFLOW_MSG_SIZE);
+
+netflow_packet_mirror = netflow_packet; /* maintain a mirror pointer for external use */
 
   data_plugins = 0;
   tee_plugins = 0;
@@ -439,9 +446,21 @@ int main(int argc,char **argv, char **envp)
     char canonical_path[PATH_MAX], *canonical_path_ptr;
 
     canonical_path_ptr = realpath(config_file, canonical_path);
-    if (canonical_path_ptr) Log(LOG_INFO, "INFO ( %s/core ): Reading configuration file '%s'.\n", config.name, canonical_path);
+    if (canonical_path_ptr) {
+	Log(LOG_INFO, "INFO ( %s/core ): Reading configuration file '%s'.\n", config.name, canonical_path);
+	printf("config_file=%s\ncanonical_path=%s\ncanonical_path_ptr=%s\n", config_file, canonical_path, canonical_path_ptr);
+
+	/* config.config_file = realpath(config_file, NULL);*/
+	config.config_file = strdup(canonical_path_ptr);
+	/* memcpy(config.config_file,canonical_path_ptr,strlen(canonical_path_ptr)+1); */
+	/* memcpy(config.config_file,config_file,strlen(config_file)+1); */
+    }
   }
-  else Log(LOG_INFO, "INFO ( %s/core ): Reading configuration from cmdline.\n", config.name);
+  else {
+    /* memcpy(config.config_file,"Reading configuration from cmdline",strlen("Reading configuration from cmdline")+1); */
+    config.config_file = "Reading configuration from cmdline";
+    Log(LOG_INFO, "INFO ( %s/core ): Reading configuration from cmdline.\n", config.name);
+  }
 
   /* Enforcing policies over aggregation methods */
   list = plugins_list;
@@ -1038,6 +1057,12 @@ int main(int argc,char **argv, char **envp)
 
   /* fixing NetFlow v9/IPFIX template func pointers */
   get_ext_db_ie_by_type = &ext_db_get_ie;
+
+#ifdef WITH_WEB
+  nfacctd_web_wrapper();
+  printf("web/core http server started\n");
+  Log(LOG_INFO, "LOG_INFO ( web/core ): http server started\n");
+#endif
 
   /* Main loop */
   for (;;) {
