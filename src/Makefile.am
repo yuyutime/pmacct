@@ -1,4 +1,4 @@
-SUBDIRS = nfprobe_plugin sfprobe_plugin bgp tee_plugin isis bmp telemetry ndpi rpki
+SUBDIRS = nfprobe_plugin sfprobe_plugin bgp tee_plugin isis bmp telemetry ndpi rpki web
 sbin_PROGRAMS =
 bin_PROGRAMS =
 EXTRA_PROGRAMS =
@@ -148,5 +148,8 @@ pmbmpd_LDFLAGS = $(DEFS)
 pmbmpd_LDADD = libdaemons.la
 if WITH_NDPI
 pmbmpd_LDADD += @NDPI_LIBS_STATIC@
+endif
+if WITH_WEB
+libdaemons_la_LIBADD += web/libweb.la
 endif
 endif

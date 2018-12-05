@@ -981,6 +981,28 @@ AC_ARG_ENABLE(ndpi,
 )
 dnl finish: nDPI handling
 
+dnl start: web handling
+AC_MSG_CHECKING(whether to enable web support)
+AC_ARG_ENABLE(web,
+  [  --enable-web                    Enable web support (default: no)],
+  [ case "$enableval" in
+  yes)
+    AC_MSG_RESULT(yes)
+    PLUGINS="${PLUGINS} web"
+    USING_WEB="yes"
+    AC_DEFINE(WITH_WEB, 1)
+    ;;
+  no)
+    AC_MSG_RESULT(no)
+    ;;
+  esac ],
+  [
+    AC_MSG_RESULT(no)
+  ]
+)
+dnl finish: web handling
+
+
 if test x"$USING_DLOPEN" = x"yes"; then
 	AC_DEFINE(HAVE_DLOPEN, 1)
 else
@@ -1194,10 +1216,13 @@ AM_CONDITIONAL([USING_TRAFFIC_BINS], [test x"$USING_TRAFFIC_BINS" = x"yes"])
 AM_CONDITIONAL([USING_BGP_BINS], [test x"$USING_BGP_BINS" = x"yes"])
 AM_CONDITIONAL([USING_BMP_BINS], [test x"$USING_BMP_BINS" = x"yes"])
 AM_CONDITIONAL([USING_ST_BINS], [test x"$USING_ST_BINS" = x"yes"])
+AM_CONDITIONAL([WITH_WEB], [test x"$USING_WEB" = x"yes"])
+
 AC_OUTPUT([ Makefile \
 	    src/Makefile src/nfprobe_plugin/Makefile \
 	    src/sfprobe_plugin/Makefile src/bgp/Makefile \
 	    src/tee_plugin/Makefile src/isis/Makefile \
 	    src/bmp/Makefile src/rpki/Makefile \
 	    src/telemetry/Makefile src/ndpi/Makefile \
+	    src/web/Makefile \
 	    examples/lg/Makefile ])
