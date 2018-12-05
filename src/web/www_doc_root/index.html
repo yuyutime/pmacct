@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Testing PMACCT http API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    * { outline: none; }
+    body {
+      background-color: #789; margin: 0;
+      padding: 0; font: 16px/1.4 Helvetica, Arial, sans-serif;
+      font: 16px/1.4 Helvetica, Arial, sans-serif;
+    }
+    div.content {
+      width: 800px; margin: 2em auto; padding: 20px 50px;
+      background-color: #fff; border-radius: 1em;
+    }
+    label { display: inline-block; min-width: 7em; }
+    input { border: 1px solid #ccc; padding: 0.2em; }
+    a:link, a:visited { color: #69c; text-decoration: none; }
+    @media (max-width: 700px) {
+      body { background-color: #fff; }
+      div.content { width: auto; margin: 0 auto; padding: 1em; }
+    }
+</style>
+</head>
+<body>
+  <div class="content">
+    <h1>PMACCT http API .</h1>
+
+    <p>
+      This page demonstrates how Mongoose http server embedded into PMACCT's nfacctd daemon can be used to implement
+      APIs.
+      Try to visit URL links below to test sample API endpoints.
+    </p>
+
+    <div>
+      <label>Index:</label><a href="/">Get generated "/" index html page</a> (it references this page as "/help")
+    </div>
+    <div>
+      <label>Configuration:</label><a href="/api/v1/config">Request nfacctd configuration struct as JSON</a>
+    </div>
+    <div>
+      <label>Status:</label><a href="/api/v1/pidstatus">Request nfacctd core daemon PID and its status from /proc/&lt;PID&gt;/status as JSON</a>
+    </div>
+    <div>
+      <label>Status:</label><a href="/api/v1/pidstatus">Request nfacctd core daemon PID and its status from /proc/&lt;PID&gt;/status as JSON</a>
+    </div>
+    <div>
+      <label>Statistics:</label><a href="/api/v1/stats">Request nfacctd core daemon statistics similar to logged on SIGUSR2 signal as html page</a>
+    </div>
+    <div>
+      <label>Flow packet dump:</label><a href="/api/v1/flow/dump">Request hexdump of currently processed netflow packet as plain text</a>
+    </div>
+
+  </div>
+</body>
+</html>
